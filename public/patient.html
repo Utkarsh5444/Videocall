@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Patient – QueueCare</title>
+  <style>
+    :root {
+      --primary: #4DA776;
+      --primary-light: #6FCC8F;
+      --accent: #E67E22;
+      --bg: linear-gradient(to bottom right, #e8f5e9, #ffffff);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --text: #2c3e50;
+      --radius: 14px;
+      --gap: 20px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--gap);
+      transition: background 0.3s ease;
+    }
+    h2 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: var(--gap);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      padding: var(--gap);
+      width: 100%;
+      max-width: 840px;
+      margin-bottom: var(--gap);
+      animation: fadeIn 0.5s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--gap);
+      justify-content: center;
+    }
+    button {
+      flex: 1 1 140px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--primary);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    button:not(:disabled):hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+    #status {
+      text-align: center;
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 1.1rem;
+      margin-top: var(--gap);
+    }
+    .videos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+    }
+    video {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: contain;
+      border-radius: var(--radius);
+      background: #000;
+      transition: all 0.2s ease-in-out;
+    }
+    #localVideo {
+      transform: scaleX(-1);
+    }
+    #remoteVideo {
+      transform: none;
+    }
+    @media (max-width: 700px) {
+      .videos {
+        grid-template-columns: 1fr;
+      }
+      .controls {
+        flex-direction: column;
+      }
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>Patient Panel</h2>
+
+  <div class="card controls">
+    <button id="joinQueue">Join Queue</button>
+    <button id="muteBtn" disabled>Mute</button>
+    <button id="videoBtn" disabled>Stop Video</button>
+    <button id="switchBtn" disabled>Switch Cam</button>
+    <button id="hangupBtn" disabled>Hang Up</button>
+  </div>
+
+  <div class="card" id="status">Not connected</div>
+  <div class="card" id="waitTime">Estimated Wait Time: Calculating...</div>
+
+  <div class="card videos">
+    <video id="localVideo" autoplay muted playsinline></video>
+    <video id="remoteVideo" autoplay playsinline></video>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"></script>
+  <script type="module" src="./script.js"></script>
+</body>
+</html>
